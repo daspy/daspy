@@ -3,15 +3,19 @@ The objective of DasPy development is for the mulisources and multivariate land 
 
 ### Model Operator: ###
   * CLM - Interface to Community Land Model 4.5
+
 ### Assimilation Algorithm: ###
   * Local Ensemble Transform Kalman Filter (https://code.google.com/p/miyoshi/)
+
 ### Observation Operator: ###
   CMEM - Interface to Community Microwave Emission Modelling Platform 4.1 (https://software.ecmwf.int/wiki/display/LDAS/CMEM)
   COSMIC - COsmic-ray Soil Moisture Interaction Code (http://cosmos.hwr.arizona.edu/)
   TSF - Two-Source Formulation
+
 ### Parallel Computing: ###
   1. mpi4py - Message Passing Interface
   2. parallelpython - Open Multi-Processing
+
 ### Run Platform: ###
   1. JUROPA (http://www.fz-juelich.de/ias/jsc/EN/Expertise/Supercomputers/JUROPA/JUROPA_node.html)
   2. Linux
