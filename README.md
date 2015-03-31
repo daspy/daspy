@@ -6,17 +6,17 @@ The objective of DasPy development is for the mulisources and multivariate land 
 ### Assimilation Algorithm: ###
   * Local Ensemble Transform Kalman Filter (https://code.google.com/p/miyoshi/)
 ### Observation Operator: ###
-    1. CMEM - Interface to Community Microwave Emission Modelling Platform 4.1 (https://software.ecmwf.int/wiki/display/LDAS/CMEM)
-    2. COSMIC - COsmic-ray Soil Moisture Interaction Code (http://cosmos.hwr.arizona.edu/)
-    3. TSF - Two-Source Formulation
+  CMEM - Interface to Community Microwave Emission Modelling Platform 4.1 (https://software.ecmwf.int/wiki/display/LDAS/CMEM)
+  COSMIC - COsmic-ray Soil Moisture Interaction Code (http://cosmos.hwr.arizona.edu/)
+  TSF - Two-Source Formulation
 ### Parallel Computing: ###
-    1. mpi4py - Message Passing Interface
-    2. parallelpython - Open Multi-Processing
+  1. mpi4py - Message Passing Interface
+  2. parallelpython - Open Multi-Processing
 ### Run Platform: ###
-    1. JUROPA (http://www.fz-juelich.de/ias/jsc/EN/Expertise/Supercomputers/JUROPA/JUROPA_node.html)
-    2. Linux
-    3. GCC (tested for 4.7.3, 4.8.2, 4.9.2)
-    4. Python 2.7
+  1. JUROPA (http://www.fz-juelich.de/ias/jsc/EN/Expertise/Supercomputers/JUROPA/JUROPA_node.html)
+  2. Linux
+  3. GCC (tested for 4.7.3, 4.8.2, 4.9.2)
+  4. Python 2.7
 
 ### References: ###
   1. Han, X., Franssen, H. J. H., Rosolem, R., Jin, R., Li, X., and Vereecken, H.: Correction of systematic model forcing bias of CLM using assimilation of cosmic-ray Neutrons and land surface temperature: a study in the Heihe Catchment, China, Hydrology and Earth System Sciences, 19, 615-629, 2015a.
