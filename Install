@@ -1,0 +1,90 @@
+# Introduction #
+
+Here we introduce the files of DasPy and how to install the related components
+
+
+# Details #
+
+
+# DasPy Files #
+  1. _Algorithm_ ------------------------ Folder of LETKF
+  1. _Analysis_ ------------------------- Folder of online plotting
+  1. _DAS\_Data_ ------------------------- Folder of input/output data
+  1. _DataBase_ ------------------------- Folder of temporary data
+  1. _Examples_ ------------------------- Folder of example test data
+  1. _ForcingData_ ------------------------ Folder of forcing data script
+  1. _ObsModel_ --------------------------- Folder of observation operator interface
+  1. _SysModel_ --------------------------- Folder of CLM interface
+  1. _Utilities_ -------------------------- Folder of useful tools
+  1. SysModel/CLM/Call\_CLM\_CESM.py ---- Run CLM
+  1. ObsModel/CMEM/Call\_CMEM.py ------- Run CMEM
+  1. ObsModel/COSMOS/COSMIC\_Py.py ----- Run COSMIC
+  1. Utilities/Start\_PP/start\_pp\_server.c ----- A simple tool to start ppserver on each node, if mpi4py does not work
+  1. DAS.sh ------------------------------- Script example to run on HPC PBS
+  1. DAS.py -------------------------------- Main program
+  1. DAS\_Initialize.py -------------------- Initiate system
+  1. DAS\_Driver.py ----------------------- Main loop for data assimilatoin
+  1. DAS\_Driver\_Common.py ----------------- Run CLM, read observation and collect CLM results
+  1. DAS\_Assim.py ----------------------------- Data assimilation modules
+  1. DAS\_Assim\_Common.py --------------------- Define the functions for model operator and observation operator
+  1. DAS\_Observation\_Operator.py ----------------- Call observation operators
+  1. DAS\_Misc.py ----------------------------------- Plotting
+  1. DAS\_Utilities.py -------------------------------- Useful functions
+  1. ParFor.py ----------------------------------------- Speedup DasPy with Weave
+
+# link mpiexec #
+  1. ln -s MPI\_Path/bin/mpiexec DAS\_Depends\_Path/bin/mpiexec
+# Install CLM #
+  1. Download the source code from: http://www.cesm.ucar.edu/models/cesm1.2/
+  1. build clm with the option "./xmlchange -file env\_build.xml -id MPILIB -val "mpi-serial""
+  1. copy the cesm.exe as DAS\_Depends\_Path + "bin/cesm\_sp\_serial.exe"
+
+# Install CMEM #
+  1. Download the source code from: https://software.ecmwf.int/wiki/display/LDAS/CMEM
+  1. copy the cmem excutable as DasPy\_Path+"ObsModel/CMEM/bin/cmem
+
+# Build DasPy\_Components #
+  1. export HOME\_Path="/lustre/jhome7/jicg41/jicg4128"
+  1. =============start\_ppserver
+  1. cd $HOME\_Path/DasPy/Utilities/Start\_PP
+  1. export CC=mpicc
+  1. make clean
+  1. make
+  1. ===============COSMIC
+  1. cd $HOME\_Path/DasPy\_Release/ObsModel/COSMOS/src
+  1. python2.7 -c "import numpy.f2py;numpy.f2py.main()" -c --f90flags="-O3 -ffree-line-length-none -fopenmp" --f77flags="-O3" --fcompiler=gnu95 -L$HOME\_Path/DAS\_Depends/lib -lblas -lgomp -m COSMIC COSMIC.f90
+  1. cp COSMIC.so ../
+
+  1. ========================== LETKF:
+  1. cd $HOME\_Path/DasPy\_Release/Algorithm/DAS
+  1. python2.7 -c "import numpy.f2py;numpy.f2py.main()" -c --f90flags="-O3 -ffree-line-length-none -fopenmp -m64 -L$HOME\_Path/DAS\_Depends/lib" --f77flags="-O3 -fopenmp -m64" --fcompiler=gnu95  -L$HOME\_Path/DAS\_Depends/lib -lgomp -lblas -m letkf\_common netlib.f netlibblas.f common\_letkf.f90 CALL\_LETKF.f90
+
+
+# Dependencies #
+### ------------------ Python ###
+  * Python 		2.7.8
+  * NumPy 		1.9.1
+  * SciPy 		0.15.0
+  * weave 		0.15.0
+  * Matplotlib 	1.4.2
+  * mpmath 		0.18
+  * numexpr 	2.2.2
+  * netCDF4 	1.1.3
+  * pp 		1.6.4
+  * mpi4py		1.3.1
+  * futures		2.2.0
+  * PypeR 		1.1.2
+  * inspyred            1.0
+
+### ------------------- R ###
+  * R		3.1.2
+  * R-Packages: raster
+
+
+### ------------------ Library ###
+  * Blas && Lapack	3.5.0
+  * HDF5		1.8.12
+  * netCDF		4.3.2
+  * netCDF-fortran	4.4.1
+  * nco		4.4.4
+  * gsl		1.16
