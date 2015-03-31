@@ -1,0 +1,78 @@
+# Introduction #
+  * Land data assimilation tutorial with land surface temperature observation
+
+# Step by Step #
+## Define the paths and domain (DAS\_Initialize.py) ##
+  * HOME\_Path="/lustre/jhome7/jicg41/jicg4128"
+  * DasPy\_Path = HOME\_Path+"/DasPy/" ----------------------------- Path to system code
+  * DAS\_Data\_Path = HOME\_Path+"/DAS\_Data/" ------------------------ Path to system input data
+  * DAS\_Output\_Path = HOME\_Path+"/DAS\_Data/" ---------------------- Path to system output data
+  * DAS\_Depends\_Path = HOME\_Path+"/DAS\_Depends/" ------------------- Path to dependencies (all the dependent libraries should be installed into this path)
+
+  * Row\_Numbers = 100    # The Number of Rows of Output Data
+  * Col\_Numbers = 100   # The Number of Cols of Output Data
+
+  * Grid\_Resolution\_CEA = 1000.0 ---------------- CLM grid cell size (meters)
+  * Grid\_Resolution\_CEA\_String = "1km" ---------- Another name of Grid\_Resolution\_CEA
+  * mksrf\_edgew = 5.9 --------------------- West boundary (degree)
+  * mksrf\_edgee = 6.733 --------------------- East boundary (degree)
+  * mksrf\_edges = 50.38 --------------------- South boundary (degree)
+  * mksrf\_edgen = 51.213 --------------------- North boundary (degree)
+  * Forcing\_Folder = "Bilinear\_1km\_1hour\_Rur" ------- Name of forcing data folder
+
+## Define run options (DAS.py) ##
+  * Def\_PP = 0 # (0: Serial, 2: Call MPI4Py)
+  * Def\_Region = 3 ------------ Index of domain, here is 3, used in DAS\_Initialize.py
+  * Observation\_Time\_File\_Path = DasPy\_Path + "Examples/Rur/Only\_LST\_Par\_LAI" ---- Path to the observation file (Observation\_Time.txt)
+  * Feedback\_Assim      = 0     # Whether to use LST update SM or use SM to update LST
+  * Parameter\_Optimization = 2  # Define whether to call the parameter optimization module (0: No 2: Augmentation)
+  * Def\_First\_Run       = 1  # 0 for restart run, 1 for first run, -1 for recover run if 0 fails. Define whether it is the first run
+    1. It controls the copy and perturbation of surface data
+  * Ensemble\_Number         = 50    # Run CLM in Ensemble
+  * ######################################## for cosmic-ray only
+  * N0 = 1132
+  * nlyr = 300
+  * ######################################## for cosmic-ray only
+  * ######################################## Time Information
+  * Start\_Year      = '2012'
+  * Start\_Month     = '01'
+  * Start\_Day       = '01'
+  * Start\_Hour      = '00'
+  * Start\_Minute    = '00'
+  * 
+  * End\_Year        = '2012'
+  * End\_Month       = '12'
+  * End\_Day         = '31'
+  * End\_Hour        = '23'
+  * End\_Minute      = '00'
+  * ######################################## Time Information
+  * ########################################  For Parameter Estimation Only
+  * ######## For joint soil moisture and soil properties estimation
+  * Soil\_Par\_Sens\_Array[0](0.md) = numpy.array([True, True, True, False, False],dtype=numpy.bool)
+  * ######## For joint soil temperature and leaf area index estimation
+  * PFT\_Par\_Sens\_Array[1](1.md) = numpy.array([True, False, False],dtype=numpy.bool)
+  * ######################################## For Parameter Estimation Only
+
+## Define parallel configurations in Start\_ppserver function (DAS\_Driver\_Common.py) ##
+  * PROCS\_PER\_NODE = 16 ------------------ number of cpu per computer node
+  * CMD\_String = "echo `cat $PBS_NODEFILE` > "+DAS\_Output\_Path+"nodefile.txt" --------- Define the command to get the nodelist from the cluster, here is the PBS example, for SLURM, it is <echo `scontrol show hostname`> instead of <`cat $PBS_NODEFILE`>
+
+## Prepare the Observation Information File (Examples/Rur/Only\_LST\_Par\_LAI/Observation\_Time.txt) ##
+  * Data path, Sensor type, etc.
+
+# Run DasPy #
+## Serial Run (Def\_PP = 0, 16 cpu for example) ##
+  * python DAS.py 16
+  * Used for 1 ensemble member
+## Parallel Run without mpi4py (Def\_PP = 1, 16 cpu for example) ##
+  * python DAS.py 16
+  * Used for multi-ensemble member
+## Parallel Run with mpi4py (Def\_PP = 2, 16 cpu) at the interactive mode ##
+  * mpiexec -n 16 python DAS.py 16
+  * Used for multi-ensemble members
+## Parallel Run (16 cpu) with job submission ##
+  * msub DAS.sh
+
+# Post-Analysis #
+  * The online plotting results are in DasPy\_Path+"Analysis"
+  * The ensemble mean of data assimilation results are in DAS\_Output\_Path+"SysModel/CLM/Rur/3D\_Ens\_Mean"
