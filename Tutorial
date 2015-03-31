@@ -2,77 +2,77 @@
   * Land data assimilation tutorial with land surface temperature observation
 
 # Step by Step #
-## Define the paths and domain (DAS\_Initialize.py) ##
-  * HOME\_Path="/lustre/jhome7/jicg41/jicg4128"
-  * DasPy\_Path = HOME\_Path+"/DasPy/" ----------------------------- Path to system code
-  * DAS\_Data\_Path = HOME\_Path+"/DAS\_Data/" ------------------------ Path to system input data
-  * DAS\_Output\_Path = HOME\_Path+"/DAS\_Data/" ---------------------- Path to system output data
-  * DAS\_Depends\_Path = HOME\_Path+"/DAS\_Depends/" ------------------- Path to dependencies (all the dependent libraries should be installed into this path)
+## Define the paths and domain (DAS_Initialize.py) ##
+  * HOME_Path="/lustre/jhome7/jicg41/jicg4128"
+  * DasPy_Path = HOME_Path+"/DasPy/" ----------------------------- Path to system code
+  * DAS_Data_Path = HOME_Path+"/DAS_Data/" ------------------------ Path to system input data
+  * DAS_Output_Path = HOME_Path+"/DAS_Data/" ---------------------- Path to system output data
+  * DAS_Depends_Path = HOME_Path+"/DAS_Depends/" ------------------- Path to dependencies (all the dependent libraries should be installed into this path)
 
-  * Row\_Numbers = 100    # The Number of Rows of Output Data
-  * Col\_Numbers = 100   # The Number of Cols of Output Data
+  * Row_Numbers = 100    # The Number of Rows of Output Data
+  * Col_Numbers = 100   # The Number of Cols of Output Data
 
-  * Grid\_Resolution\_CEA = 1000.0 ---------------- CLM grid cell size (meters)
-  * Grid\_Resolution\_CEA\_String = "1km" ---------- Another name of Grid\_Resolution\_CEA
-  * mksrf\_edgew = 5.9 --------------------- West boundary (degree)
-  * mksrf\_edgee = 6.733 --------------------- East boundary (degree)
-  * mksrf\_edges = 50.38 --------------------- South boundary (degree)
-  * mksrf\_edgen = 51.213 --------------------- North boundary (degree)
-  * Forcing\_Folder = "Bilinear\_1km\_1hour\_Rur" ------- Name of forcing data folder
+  * Grid_Resolution_CEA = 1000.0 ---------------- CLM grid cell size (meters)
+  * Grid_Resolution_CEA_String = "1km" ---------- Another name of Grid\_Resolution_CEA
+  * mksrf_edgew = 5.9 --------------------- West boundary (degree)
+  * mksrf_edgee = 6.733 --------------------- East boundary (degree)
+  * mksrf_edges = 50.38 --------------------- South boundary (degree)
+  * mksrf_edgen = 51.213 --------------------- North boundary (degree)
+  * Forcing_Folder = "Bilinear_1km_1hour_Rur" ------- Name of forcing data folder
 
 ## Define run options (DAS.py) ##
-  * Def\_PP = 0 # (0: Serial, 2: Call MPI4Py)
-  * Def\_Region = 3 ------------ Index of domain, here is 3, used in DAS\_Initialize.py
-  * Observation\_Time\_File\_Path = DasPy\_Path + "Examples/Rur/Only\_LST\_Par\_LAI" ---- Path to the observation file (Observation\_Time.txt)
-  * Feedback\_Assim      = 0     # Whether to use LST update SM or use SM to update LST
-  * Parameter\_Optimization = 2  # Define whether to call the parameter optimization module (0: No 2: Augmentation)
-  * Def\_First\_Run       = 1  # 0 for restart run, 1 for first run, -1 for recover run if 0 fails. Define whether it is the first run
+  * Def_PP = 0 # (0: Serial, 2: Call MPI4Py)
+  * Def_Region = 3 ------------ Index of domain, here is 3, used in DAS_Initialize.py
+  * Observation_Time_File_Path = DasPy_Path + "Examples/Rur/Only_LST_Par_LAI" ---- Path to the observation file (Observation_Time.txt)
+  * Feedback_Assim      = 0     # Whether to use LST update SM or use SM to update LST
+  * Parameter_Optimization = 2  # Define whether to call the parameter optimization module (0: No 2: Augmentation)
+  * Def_First_Run       = 1  # 0 for restart run, 1 for first run, -1 for recover run if 0 fails. Define whether it is the first run
     1. It controls the copy and perturbation of surface data
-  * Ensemble\_Number         = 50    # Run CLM in Ensemble
+  * Ensemble_Number         = 50    # Run CLM in Ensemble
   * ######################################## for cosmic-ray only
   * N0 = 1132
   * nlyr = 300
   * ######################################## for cosmic-ray only
   * ######################################## Time Information
-  * Start\_Year      = '2012'
-  * Start\_Month     = '01'
-  * Start\_Day       = '01'
-  * Start\_Hour      = '00'
-  * Start\_Minute    = '00'
+  * Start_Year      = '2012'
+  * Start_Month     = '01'
+  * Start_Day       = '01'
+  * Start_Hour      = '00'
+  * Start_Minute    = '00'
   * 
-  * End\_Year        = '2012'
-  * End\_Month       = '12'
-  * End\_Day         = '31'
-  * End\_Hour        = '23'
-  * End\_Minute      = '00'
+  * End_Year        = '2012'
+  * End_Month       = '12'
+  * End_Day         = '31'
+  * End_Hour        = '23'
+  * End_Minute      = '00'
   * ######################################## Time Information
   * ########################################  For Parameter Estimation Only
   * ######## For joint soil moisture and soil properties estimation
-  * Soil\_Par\_Sens\_Array[0](0.md) = numpy.array([True, True, True, False, False],dtype=numpy.bool)
+  * Soil_Par_Sens_Array[0](0.md) = numpy.array([True, True, True, False, False],dtype=numpy.bool)
   * ######## For joint soil temperature and leaf area index estimation
-  * PFT\_Par\_Sens\_Array[1](1.md) = numpy.array([True, False, False],dtype=numpy.bool)
+  * PFT_Par_Sens_Array[1](1.md) = numpy.array([True, False, False],dtype=numpy.bool)
   * ######################################## For Parameter Estimation Only
 
-## Define parallel configurations in Start\_ppserver function (DAS\_Driver\_Common.py) ##
-  * PROCS\_PER\_NODE = 16 ------------------ number of cpu per computer node
-  * CMD\_String = "echo `cat $PBS_NODEFILE` > "+DAS\_Output\_Path+"nodefile.txt" --------- Define the command to get the nodelist from the cluster, here is the PBS example, for SLURM, it is <echo `scontrol show hostname`> instead of <`cat $PBS_NODEFILE`>
+## Define parallel configurations in Start_ppserver function (DAS_Driver_Common.py) ##
+  * PROCS_PER_NODE = 16 ------------------ number of cpu per computer node
+  * CMD_String = "echo `cat $PBS_NODEFILE` > "+DAS_Output_Path+"nodefile.txt" --------- Define the command to get the nodelist from the cluster, here is the PBS example, for SLURM, it is <echo `scontrol show hostname`> instead of <`cat $PBS_NODEFILE`>
 
-## Prepare the Observation Information File (Examples/Rur/Only\_LST\_Par\_LAI/Observation\_Time.txt) ##
+## Prepare the Observation Information File (Examples/Rur/Only_LST_Par_LAI/Observation_Time.txt) ##
   * Data path, Sensor type, etc.
 
 # Run DasPy #
-## Serial Run (Def\_PP = 0, 16 cpu for example) ##
+## Serial Run (Def_PP = 0, 16 cpu for example) ##
   * python DAS.py 16
   * Used for 1 ensemble member
-## Parallel Run without mpi4py (Def\_PP = 1, 16 cpu for example) ##
+## Parallel Run without mpi4py (Def_PP = 1, 16 cpu for example) ##
   * python DAS.py 16
   * Used for multi-ensemble member
-## Parallel Run with mpi4py (Def\_PP = 2, 16 cpu) at the interactive mode ##
+## Parallel Run with mpi4py (Def_PP = 2, 16 cpu) at the interactive mode ##
   * mpiexec -n 16 python DAS.py 16
   * Used for multi-ensemble members
 ## Parallel Run (16 cpu) with job submission ##
   * msub DAS.sh
 
 # Post-Analysis #
-  * The online plotting results are in DasPy\_Path+"Analysis"
-  * The ensemble mean of data assimilation results are in DAS\_Output\_Path+"SysModel/CLM/Rur/3D\_Ens\_Mean"
+  * The online plotting results are in DasPy_Path+"Analysis"
+  * The ensemble mean of data assimilation results are in DAS_Output_Path+"SysModel/CLM/Rur/3D_Ens_Mean"
