@@ -1,0 +1,4 @@
+SensorType    Variable             Quantity         ID         QC_ID              Resolution  Year  Month Day  Hour  Minute      Observation_File
+InSitu         Soil_Moisture           m3/m3          SM                None                1000.0    2010   06   01   13    00        ~/DAS_Data/Observation/Rur/MODIS-SM-2010-06-01.nc
+InSitu         Soil_Moisture           m3/m3          SM                None                1000.0    2010   06   02   13    00        ~/DAS_Data/Observation/Rur/MODIS-SM-2010-06-02.nc
+InSitu         Soil_Moisture           m3/m3          SM                None                1000.0    2010   06   03   13    00        ~/DAS_Data/Observation/Rur/MODIS-SM-2010-06-03.nc

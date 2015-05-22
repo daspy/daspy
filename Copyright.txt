@@ -1,0 +1,29 @@
+Copyright of DasPy:
+Author - Xujun Han (Forschungszentrum Jülich, Germany)
+
+DasPy was funded by:
+1. Forschungszentrum Jülich, Agrosphere (IBG 3), Jülich, Germany
+2. Cold and Arid Regions Environmental and Engineering Research Institute, Chinese Academy of Sciences, Lanzhou, PR China
+3. Centre for High-Performance Scientific Computing in Terrestrial Systems: HPSC TerrSys, Geoverbund ABC/J, Jülich, Germany
+
+Please include the following references related to DasPy:
+1. Han, X., Franssen, H. J. H., Rosolem, R., Jin, R., Li, X., and Vereecken, H.: Correction of systematic model forcing bias of CLM using assimilation of cosmic-ray Neutrons and land surface temperature: a study in the Heihe Catchment, China, Hydrology and Earth System Sciences, 19, 615-629, 2015a.
+2. Han, X. J., Franssen, H. J. H., Montzka, C., and Vereecken, H.: Soil moisture and soil properties estimation in the Community Land Model with synthetic brightness temperature observations, Water Resour Res, 50, 6081-6105, 2014a.
+3. Han, X. J., Franssen, H. J. H., Li, X., Zhang, Y. L., Montzka, C., and Vereecken, H.: Joint Assimilation of Surface Temperature and L-Band Microwave Brightness Temperature in Land Data Assimilation, Vadose Zone J, 12, 0, 2013.
+
+
+Copyright of COSMIC:
+Author - W. James Shuttleworth (University of Arizona) and Rafael Rosolem (University of Bristol)
+Notes - COSMIC development was funded by the US National Science Foundation COsmic-ray Soil Moisture Observing System project (COSMOS; http://cosmos.hwr.arizona.edu)
+Please include the following references related to COSMIC:
+1. Shuttleworth, J., Rosolem, R., Zreda, M., and Franz, T. E.: The COsmic-ray Soil Moisture Interaction Code (COSMIC) for use in data assimilation, Hydrology and Earth System Sciences, 17, 3205-3217, 2013.
+2. Rosolem, R., Hoar, T., Arellano, A., Anderson, J. L., Shuttleworth, W. J., Zeng, X., and Franz, T. E.: Translating aboveground cosmic-ray neutron intensity to high-frequency soil moisture profiles at sub-kilometer scale, Hydrology and Earth System Sciences, 18, 4363-4379, 2014.
+
+
+Copyright of LETKF:
+Author - Takemasa Miyoshi (RIKEN Advanced Institute for Computational Science)
+Please include the following references related to COSMIC:
+1. Miyoshi, T. and Yamane, S.: Local Ensemble Transform Kalman Filtering with an AGCM at a T159/L48 Resolution, Mon Weather Rev, 135, 3841-3861, 2007.
+2. Miyoshi, T., Kondo, K., and Imamura, T.: The 10,240-member ensemble Kalman filtering with an intermediate AGCM, Geophys Res Lett, 41, 5264-5271, 2014.
+
+

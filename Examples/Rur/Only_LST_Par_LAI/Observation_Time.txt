@@ -1,0 +1,4 @@
+SensorType    Variable             Quantity         ID         QC_ID              Resolution  Year  Month Day  Hour  Minute      Observation_File
+Terra        Surface_Temperature          K       LST_1km            QC            1000.0    2012   01   02   22    00        ~/DasPy_Release/Examples/Rur/Terra/LST_Daily/2012/MODIS-LST-2012-01-02-22.nc
+Terra        Surface_Temperature          K       LST_1km            QC            1000.0    2012   01   15   22    00        ~/DasPy_Release/Examples/Rur/Terra/LST_Daily/2012/MODIS-LST-2012-01-15-22.nc
+Terra        Surface_Temperature          K       LST_1km            QC            1000.0    2012   01   16   11    00        ~/DasPy_Release/Examples/Rur/Terra/LST_Daily/2012/MODIS-LST-2012-01-16-11.nc
