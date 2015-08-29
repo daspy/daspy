@@ -15,6 +15,7 @@ The objective of DasPy development is for the mulisources and multivariate land 
 ### Parallel Computing: ###
   1. mpi4py - Message Passing Interface (MPI)
   2. parallelpython - Open Multi-Processing (OpenMP)
+  3. SciPy-Weave - C++ && OpenMP
 
 ### Run Platform: ###
   1. JUROPA (http://www.fz-juelich.de/ias/jsc/EN/Expertise/Supercomputers/JUROPA/JUROPA_node.html)
