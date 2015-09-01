@@ -223,13 +223,13 @@ Hard_Par_Sens_Array = ['' for i in range(2)]
 Soil_Par_Sens_Array[0] = numpy.array([True, True, True, False, False],dtype=numpy.bool)
 Veg_Par_Sens_Array[0] = numpy.array([False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],dtype=numpy.bool)# for future
 PFT_Par_Sens_Array[0] = numpy.array([False, False, False],dtype=numpy.bool)
-Hard_Par_Sens_Array[0] = numpy.array([False, False, False],dtype=numpy.bool)# for future
+Hard_Par_Sens_Array[0] = numpy.array([False, False, False, False, False],dtype=numpy.bool)# for future
 
 #SensorVariable_Sub == "Surface_Temperature":
 Soil_Par_Sens_Array[1] = numpy.array([False, False, False, False, False],dtype=numpy.bool)
 Veg_Par_Sens_Array[1] = numpy.array([False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],dtype=numpy.bool)# for future
 PFT_Par_Sens_Array[1] = numpy.array([True, True, False],dtype=numpy.bool)
-Hard_Par_Sens_Array[1] = numpy.array([False, False, False],dtype=numpy.bool)# for future
+Hard_Par_Sens_Array[1] = numpy.array([False, False, False, False, False],dtype=numpy.bool)# for future
 
 NAvalue = -9999.0
 CLM_NA = 1e36

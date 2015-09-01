@@ -1,21 +1,18 @@
 '''
-This Program Use the Remote Sensed 'Soil Moisture', 'Canopy Water', 'Ground Surface Temperature', 'Albedo', 'Snow Depth', 'Snow Cover Fraction', 'Leaf Area Index', 'Water Storage Variations', 'Ground Table Depth', 'Run Off' data to Update the Community Land Model.
-Excution Flows:
-1. Define the Time; 2. Read the Observation Time Records File; 3. Determine when to Do Assimilation on which Variable;
-4. Run CLM to the Observation Time; 5. Read the CLM Initial File and Observation File;
-6. Analyze the CLM Output and Observation Data; 7. Call LETKF to Geft the Analysis;
-8. Update CLM Initial File; 9. Go To 1.
-m
-The Observation Data are Contained in the 'DAS_Data/Observation' Directory. The 'Observation_Time.txt' File Contains the Observation Information Line by Line.
+Copyright of DasPy:
+Author - Xujun Han (Forschungszentrum Jülich, Germany)
+x.han@fz-juelich.de, xujunhan@gmail.com
 
-The multi-scale observation will be processed by the discrete wavelets transformation (DWT).
+DasPy was funded by:
+1. Forschungszentrum Jülich, Agrosphere (IBG 3), Jülich, Germany
+2. Cold and Arid Regions Environmental and Engineering Research Institute, Chinese Academy of Sciences, Lanzhou, PR China
+3. Centre for High-Performance Scientific Computing in Terrestrial Systems: HPSC TerrSys, Geoverbund ABC/J, Jülich, Germany
 
-The Observation variance is estimated by the geostatistics or image noise method.
-
-We only use one ensemble during the simulation, after that we perturb the model state to get the ensembles for assimilation.
-
-1=vis, 2=nir
-
+Please include the following references related to DasPy:
+1. Han, X., Li, X., He, G., Kumbhar, P., Montzka, C., Kollet, S., Miyoshi, T., Rosolem, R., Zhang, Y., Vereecken, H., and Franssen, H. J. H.: DasPy 1.0 &ndash; the Open Source Multivariate Land Data Assimilation Framework in combination with the Community Land Model 4.5, Geosci. Model Dev. Discuss., 8, 7395-7444, 2015.
+2. Han, X., Franssen, H. J. H., Rosolem, R., Jin, R., Li, X., and Vereecken, H.: Correction of systematic model forcing bias of CLM using assimilation of cosmic-ray Neutrons and land surface temperature: a study in the Heihe Catchment, China, Hydrology and Earth System Sciences, 19, 615-629, 2015a.
+3. Han, X., Franssen, H. J. H., Montzka, C., and Vereecken, H.: Soil moisture and soil properties estimation in the Community Land Model with synthetic brightness temperature observations, Water Resour Res, 50, 6081-6105, 2014a.
+4. Han, X., Franssen, H. J. H., Li, X., Zhang, Y. L., Montzka, C., and Vereecken, H.: Joint Assimilation of Surface Temperature and L-Band Microwave Brightness Temperature in Land Data Assimilation, Vadose Zone J, 12, 0, 2013.
 '''
 from mpi4py import MPI
 import multiprocessing, shutil
@@ -113,7 +110,7 @@ def DAS_Driver(mpi4py_comm, mpi4py_null, mpi4py_rank,  mpi4py_size, mpi4py_name,
         restart_pp_server = mpi4py_comm.bcast(restart_pp_server)
     
     while Def_PP and restart_pp_server and Ensemble_Number > 1:
-        job_server_node_array = Stop_ppserver(Def_PP, DAS_Depends_Path, job_server_node_array, NSLOTS, DasPy_Path, active_nodes_server, PP_Servers_Per_Node)
+        job_server_node_array = Stop_ppserver(mpi4py_rank, Def_PP, DAS_Depends_Path, job_server_node_array, NSLOTS, DasPy_Path, active_nodes_server, PP_Servers_Per_Node)
         job_server_node_array, active_nodes_server, PROCS_PER_NODE, PP_Port, PP_Servers_Per_Node = Start_ppserver(mpi4py_comm, mpi4py_rank, mpi4py_name, DAS_Output_Path, Ensemble_Number, DAS_Depends_Path, active_nodes_server, Def_Region, NSLOTS, Def_Print, DasPy_Path, Def_PP, Def_CESM_Multi_Instance, PP_Port)
         
     if Def_PP == 2:
