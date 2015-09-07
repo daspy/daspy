@@ -46,7 +46,7 @@ def DAS_Driver(mpi4py_comm, mpi4py_null, mpi4py_rank,  mpi4py_size, mpi4py_name,
     #print DasPy_Path+"ObsModel/COSMOS/COSMIC_Py.py"
     #print DasPy_Path+"ObsModel/COSMOS/COSMIC_Py.py"
     COSMIC_Py = imp.load_source("COSMIC_Py",DasPy_Path+"ObsModel/COSMOS/COSMIC_Py.py")
-    memory_profiler = imp.load_source("memory_profiler",DasPy_Path+"Utilities/memory_profiler.py") 
+    memory_profiler = [] 
     COSMIC = imp.load_dynamic("COSMIC",DasPy_Path+"ObsModel/COSMOS/COSMIC.so")
     
     num_processors = multiprocessing.cpu_count()
@@ -2139,10 +2139,7 @@ def DAS_Driver(mpi4py_comm, mpi4py_null, mpi4py_rank,  mpi4py_size, mpi4py_name,
                 del gc.garbage[:]
                 
                 r('gc(TRUE)')
-                
-                mem_usage = memory_profiler.memory_usage(proc=-1, interval=.1, timeout=None)
-                print "mem_usage",mem_usage
-            
+                            
             if Def_PP == 2:
                 mpi4py_comm.barrier()
                 mpi4py_comm.Barrier()
