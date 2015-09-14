@@ -994,7 +994,8 @@ def DAS_Config(mpi4py_rank, Model_Driver, Start_Year, Start_Month, Start_Day, St
     elif socket.gethostname()[0] == 'n':
         num_processors = 16
         omp_get_num_procs_ParFor = 16
-        
+    
+    omp_get_num_procs_ParFor = max([1,num_processors/Ensemble_Number])
     NSLOTS = int(sys.argv[1])   # How many processors assigned
     Node_Num = NSLOTS / num_processors
     
