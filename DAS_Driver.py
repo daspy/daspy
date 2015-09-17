@@ -270,7 +270,7 @@ def DAS_Driver(mpi4py_comm, mpi4py_null, mpi4py_rank,  mpi4py_size, mpi4py_name,
     Soil_Thickness = numpy.asarray([0.01751282, 0.02757897, 0.04547003, 0.07496741, 0.1236004, 0.2037826, 0.3359806, 0.5539384, 0.91329, 1.50576, 2.48258, 4.093082, 6.748351, 11.12615, 13.85115])
         
     Variable_List = ["Soil_Moisture","Surface_Temperature","Vegetation_Temperature","Canopy_Water","Albedo_BSA_Band_vis","Albedo_BSA_Band_nir","Albedo_WSA_Band_vis",
-                         "Albedo_WSA_Band_nir","Emissivity","Snow_Depth","Snow_Cover_Fraction","Snow_Water_Equivalent","LAI","Sensible_Heat"]
+                         "Albedo_WSA_Band_nir","Emissivity","Snow_Depth","Snow_Cover_Fraction","Snow_Water_Equivalent","LAI","Sensible_Heat","Irrigation_Scheduling"]
     
     Dim_CLM_State = len(Variable_List)
     Variable_Assimilation_Flag = numpy.zeros(Dim_CLM_State,dtype=numpy.float32)
