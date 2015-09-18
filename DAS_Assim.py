@@ -168,7 +168,7 @@ def CLM_Assim_Common(Block_Index, Model_Driver, Def_PP, Def_First_Run, Def_Print
                         if Feedback_Assim: # and (string.atoi(Stop_Month) >= 4) and (string.atoi(Stop_Month) <= 10):
                             print "The Number of Model Grid is:", nx / (Soil_Layer_Num-5+1+17)
                         else:
-                            print "The Number of Model Grid is:", nx / (Soil_Layer_Num-5+1+ParFlow_Layer_Num)
+                            print "The Number of Model Grid is:", nx / (Soil_Layer_Num-5+1)
                                 
                 elif (Variable_Assimilation_Flag[Variable_List.index(SensorVariable)] and SensorVariable == "Surface_Temperature"):
                     if Feedback_Assim: # and (string.atoi(Stop_Month) >= 4) and (string.atoi(Stop_Month) <= 10):
@@ -205,8 +205,8 @@ def CLM_Assim_Common(Block_Index, Model_Driver, Def_PP, Def_First_Run, Def_Print
                             print "******************nx / (Soil_Layer_Num-5) < ny************************",nx / (Soil_Layer_Num-5),ny
                             os.abort()
                     else:
-                        if (nx / (Soil_Layer_Num-5+1+ParFlow_Layer_Num)) < ny:
-                            print "******************nx / (Soil_Layer_Num-5+1+ParFlow_Layer_Num) < ny************************",nx / (Soil_Layer_Num-5+1+ParFlow_Layer_Num),ny
+                        if (nx / (Soil_Layer_Num-5+1)) < ny:
+                            print "******************nx / (Soil_Layer_Num-5+1) < ny************************",nx / (Soil_Layer_Num-5+1),ny
                             os.abort()
                             
             elif (Variable_Assimilation_Flag[Variable_List.index(SensorVariable)] and SensorVariable == "Surface_Temperature"):
