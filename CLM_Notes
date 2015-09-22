@@ -1,0 +1,38 @@
+In order to run CLM in DasPy, the source code of CLM needs to be modified as follows:
+1. comment call mpi_abort (mpicom, 1) in models/lnd/clm/src/util_share/abortutils.F90
+2. add the following lines on the top of models/lnd/clm/src/clm4_5/main/histFldsMod.F90:
+    call hist_addfld1d (fname='HTOP', units='m', &
+         avgflag='A', long_name='canopy top', &
+         ptr_pft=pps%htop)
+
+    call hist_addfld1d (fname='HBOT', units='m', &
+         avgflag='A', long_name='canopy bottom', &
+         ptr_pft=pps%hbot, default='inactive')
+		 
+    call hist_addfld2d (fname='bsw', units='unitless', type2d='levgrnd', &
+         avgflag='A', long_name='clapp and hornberger B', &
+         ptr_pft=cps%bsw, default='inactive')
+	
+    call hist_addfld2d (fname='watsat', units='m^3/m^3', type2d='levgrnd', &
+         avgflag='A', long_name='water saturated', &
+         ptr_pft=cps%watsat, default='inactive')
+		 
+  	call hist_addfld1d (fname='Z0MV', units='m', &
+  	 avgflag='A', long_name='roughness length over vegetation, momentum', &
+  	 ptr_pft=pps%z0mv, default='inactive')
+  
+  	call hist_addfld1d (fname='DISPLA', units='m', &
+  	 avgflag='A', long_name='displacement height', &
+	 ptr_pft=pps%displa, default='inactive')
+	 
+    call hist_addfld1d (fname='ONSET_FDD', units='C degree-days', &
+         avgflag='A', long_name='onset freezing degree days counter', &
+         ptr_pft=pepv%onset_fdd, default='inactive')
+         
+    call hist_addfld2d (fname='ROOTFR', units='proportion', type2d='levgrnd', &
+         avgflag='A', long_name='fraction of roots in each soil layer', &
+         ptr_pft=pps%rootfr, default='inactive')
+
+    call hist_addfld2d (fname='ROOTR', units='proportion', type2d='levgrnd', &
+         avgflag='A', long_name='effective fraction of roots in each soil layer', &
+         ptr_pft=pps%rootr, default='inactive')
