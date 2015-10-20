@@ -2,7 +2,7 @@
     CLM and WRF Coupled System
 '''
 
-Def_PP = 1 # (0: Serial, 1: ParallelPython 2: MPI4Py)
+Def_PP = 0 # (0: Serial, 1: ParallelPython 2: MPI4Py)
 mpi4py_comm = []
 mpi4py_null = []
 mpi4py_rank = 0
@@ -85,8 +85,8 @@ Observation_Time_File_Path = DasPy_Path + "Examples/Rur/Only_LST_Par_LAI"
 Def_CESM_Multi_Instance = 0 # for future
 if mpi4py_rank == 0:
     print "*********************************************** Common Configuration"
-Def_Run_DAS_Model    = 1     # Do Data Assimilation
-Def_Run_Model         = 0     # for future
+Def_Run_DAS_Model    = 0     # Do Data Assimilation
+Def_Run_Model         = 1     # for future
 Def_Run_WRF         = 0     # for future
 Def_Irrigation_Opt  = 0     # for future
 
@@ -101,7 +101,7 @@ Def_Par_Optimized  = 1     # Define whether to use the optimized parameters
 
 Def_First_Run       = 1  # 0 for restart run, 1 for first run, -1 for recover run if 0 fails. Define whether it is the first run
                         # It controls the copy and perturbation of surface data
-Ensemble_Number         = 2    # Run CLM in Ensemble
+Ensemble_Number         = 1    # Run CLM in Ensemble
 Ensemble_Number_Predict = 100  # for future
 
 Normal_Score_Trans      = 0 # for future

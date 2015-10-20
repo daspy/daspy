@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 '''
 Copyright of DasPy:
 Author - Xujun Han (Forschungszentrum Jülich, Germany)
