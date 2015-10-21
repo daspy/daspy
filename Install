@@ -76,10 +76,10 @@ Here we introduce the files of DasPy and how to install the related components
   * PypeR 		1.1.2
   * inspyred            1.0
 
-sudo dnf install gcc gcc-c++ gcc-gfortran kernel-devel kernel-headers dkms openmpi-devel valgrind-openmpi
-sudo dnf install make cmake-gui eclipse-cdt eclipse-pydev eclipse-photran htop mosh filezilla sshpass system-config-users nano subversion cvs bzr mercurial git
+sudo dnf install gcc gcc-c++ gcc-gfortran kernel-devel kernel-headers dkms
+sudo dnf install make cmake-gui htop mosh filezilla sshpass system-config-users nano subversion cvs bzr mercurial git
 sudo dnf install python-futures python-lxml transfig pstoedit h5py nco netcdf4-python python-pp python-basemap python-dill python-psutil python-pandas python-pip python-cffi numpy numpy-f2py scipy rpy python-matplotlib python-matplotlib-qt4 python-matplotlib-tk python-mpmath
-sudo dnf install libxml2 libxml2-devel gsl-devel armadillo-devel libpng-devel jasper-devel openjpeg-devel qgis qgis-python octave-devel R-devel geos-devel gdal gdal-devel proj-static proj-devel proj-epsg hdf5-devel netcdf-devel netcdf-fortran-devel netcdf-static netcdf ncview ncl hdf5 hdf5-static hdf5-devel ncl-devel libtool boost-devel lapack-static f2c f2c-libs blas-static nasm
+sudo dnf install libxml2 libxml2-devel gsl-devel armadillo-devel libpng-devel jasper-devel openjpeg-devel octave-devel R-devel geos-devel gdal gdal-devel proj-static proj-devel proj-epsg hdf5-devel netcdf ncview ncl hdf5 hdf5-static hdf5-devel ncl-devel libtool lapack-static f2c f2c-libs blas-static nasm
 
 
 ### ------------------- R ###
