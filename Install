@@ -84,7 +84,7 @@ sudo dnf install libxml2 libxml2-devel gsl-devel armadillo-devel libpng-devel ja
 
 ### ------------------- R ###
   * R		3.1.2
-  * R-Packages: raster
+  * R-Packages: raster,rgdal
 
 
 ### ------------------ Library ###
