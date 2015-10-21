@@ -28,12 +28,13 @@ def DAS_Initialize(Model_Driver, Def_Region, mpi4py_rank=0):
     if mpi4py_rank == 0:
         print "socket.gethostname()",socket.gethostname()
     
-    HOME_Path="/lustre/jhome7/jicg41/jicg4128"
+    HOME_Path="/home/hanxujun"
     
-    DasPy_Path = HOME_Path+"/DasPy_Release/"
-    DAS_Data_Path = HOME_Path+"/DasPy_Release/DAS_Data/"
-    DAS_Output_Path = HOME_Path+"/DasPy_Release/DAS_Data/"
-    DAS_Depends_Path = HOME_Path+"/DAS_Depends/"
+    DasPy_Path = HOME_Path+"/DasPy_1.0/"
+    DAS_Data_Path = HOME_Path+"/DasPy_1.0/DAS_Data/"
+    DAS_Output_Path = HOME_Path+"/DasPy_1.0/DAS_Data/"
+    #DAS_Depends_Path = HOME_Path+"/DAS_Depends/"
+    DAS_Depends_Path = "/home/hanxujun/DAS_Depends/"
     geog_data_path = ''
     WRF_WPS_Path = ""
     WRF_WRF_Path = ""

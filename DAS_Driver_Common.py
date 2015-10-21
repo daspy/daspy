@@ -1165,9 +1165,13 @@ def Start_ppserver(mpi4py_comm, mpi4py_rank, mpi4py_name, DAS_Output_Path, Ensem
                     subprocess.call("rm -rf "+DAS_Output_Path+"nodefile.txt",shell=True)
                 
                 if mpi4py_rank == 0:
-                    CMD_String = "echo `cat $PBS_NODEFILE` > "+DAS_Output_Path+"nodefile.txt"
-                    print "CMD_String",CMD_String
-                    pipe = subprocess.Popen(CMD_String, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,stderr=subprocess.PIPE, close_fds=True)
+                    if socket.gethostname() == 'localhost.localdomain':
+                        CMD_String = "echo `hostname` > "+DAS_Output_Path+"nodefile.txt"
+                        pipe = subprocess.Popen(CMD_String, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,stderr=subprocess.PIPE, close_fds=True)
+                    else:
+                        CMD_String = "echo `cat $PBS_NODEFILE` > "+DAS_Output_Path+"nodefile.txt"
+                        print "CMD_String",CMD_String
+                        pipe = subprocess.Popen(CMD_String, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,stderr=subprocess.PIPE, close_fds=True)
                     
                     stdout_value, stderr_value = pipe.communicate()
                     print 'stdout_value:', repr(stdout_value)
@@ -1192,11 +1196,12 @@ def Start_ppserver(mpi4py_comm, mpi4py_rank, mpi4py_name, DAS_Output_Path, Ensem
                 
                 if mpi4py_rank == 0:
                     print "------------Calculate the PP_Servers_Per_Node"
-                PP_Servers_Per_Node = int(numpy.ceil(float(Ensemble_Number+1.0) / len(active_nodes_server)))
-                #PP_Servers_Per_Node = PROCS_PER_NODE
-                if mpi4py_rank == 0:
-                    print "----------------------PP_Servers_Per_Node is",PP_Servers_Per_Node
-                    print ""
+                if Def_PP == 2:
+                    PP_Servers_Per_Node = int(numpy.ceil(float(Ensemble_Number+1.0) / len(active_nodes_server)))
+				    #PP_Servers_Per_Node = PROCS_PER_NODE
+                    if mpi4py_rank == 0:
+					   print "----------------------PP_Servers_Per_Node is",PP_Servers_Per_Node
+					   print ""
                 
                 if Def_PP == 2:
                     
@@ -1268,15 +1273,17 @@ def Start_ppserver(mpi4py_comm, mpi4py_rank, mpi4py_name, DAS_Output_Path, Ensem
                     print "active_nodes_server",active_nodes_server
                 
                 if mpi4py_rank == 0:
-                    print "Wait untile "+DAS_Output_Path+"/ppserver_log.txt written....."
+                    print "Wait until "+DAS_Output_Path+"/ppserver_log.txt written....."
                     ppserver_lines_length = 0
+                    #print "ppserver_lines_length, len(active_nodes_server)*PP_Servers_Per_Node",ppserver_lines_length, len(active_nodes_server)*PP_Servers_Per_Node
+                    #os.abort()
                     while ppserver_lines_length != len(active_nodes_server) * PP_Servers_Per_Node:
                         print "ppserver_lines_length, len(active_nodes_server)*PP_Servers_Per_Node",ppserver_lines_length, len(active_nodes_server)*PP_Servers_Per_Node
                         time.sleep(1)
                         ppserver_file = open(DAS_Output_Path+"ppserver_log.txt",'r')
                         ppserver_lines = ppserver_file.readlines()
                         ppserver_file.close()
-                        #print ppserver_lines
+                        print ppserver_lines
                         ppserver_lines_length = len(ppserver_lines)
                     
                         end = time.time()
@@ -1289,13 +1296,13 @@ def Start_ppserver(mpi4py_comm, mpi4py_rank, mpi4py_name, DAS_Output_Path, Ensem
                             subprocess.call(ppserver_CMD_String,shell=True)
                             start = time.time()
                     
-                
+                    #print ppserver_lines
                     Node_List_Prior = []
                     Port_List_Prior = []
                     for ppserver_line_index in range(len(ppserver_lines)):
                         Node_List_Prior.append(string.split(ppserver_lines[ppserver_line_index])[3])
                         Port_List_Prior.append(string.split(ppserver_lines[ppserver_line_index])[4])
-                    
+                
                     # Get the Node Processor Number
                     Node_Count = numpy.zeros(len(Node_List_Prior))
                     nodelist = list(string.split(nodelist))
