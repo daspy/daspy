@@ -81,6 +81,25 @@ sudo dnf install make cmake-gui htop mosh filezilla sshpass system-config-users 
 sudo dnf install python-futures python-lxml transfig pstoedit h5py nco netcdf4-python python-pp python-basemap python-dill python-psutil python-pandas python-pip python-cffi numpy numpy-f2py scipy rpy python-matplotlib python-matplotlib-qt4 python-matplotlib-tk python-mpmath
 sudo dnf install libxml2 libxml2-devel gsl-devel armadillo-devel libpng-devel jasper-devel openjpeg-devel octave-devel R-devel geos-devel gdal gdal-devel proj-static proj-devel proj-epsg hdf5-devel netcdf ncview ncl hdf5 hdf5-static hdf5-devel ncl-devel libtool lapack-static f2c f2c-libs blas-static nasm
 
+=====netcdf-4.3.2
+tar xvzf netcdf-4.3.3.1.tar.gz
+cd netcdf-4.3.3.1
+make clean
+CFLAGS="-O3 -I/home/hanxujun/DAS_Depends/include" CPPFLAGS="-O3 -I/home/hanxujun/DAS_Depends/include" LDFLAGS=-L/home/hanxujun/DAS_Depends/lib FFLAGS="-O3" FCFLAGS="-O3" ./configure --prefix=/home/hanxujun/DAS_Depends --enable-static --enable-shared --enable-netcdf4 --enable-largefile --enable-large-file-tests
+make -j32
+make install
+cd ../
+
+=================netcdf-fortran-4.4
+tar xvzf netcdf-fortran-4.4.2.tar.gz
+cd netcdf-fortran-4.4.2
+make clean
+autoreconf -i -f
+CFLAGS="-O3 -I/home/hanxujun/DAS_Depends/include" FFLAGS="-O3" FCFLAGS="-O3" LDFLAGS=-L/home/hanxujun/DAS_Depends/lib LIBS="-lhdf5_hl -lhdf5 -lz -lm" ./configure --prefix=/home/hanxujun/DAS_Depends --enable-static --enable-shared --enable-largefile --enable-large-file-tests
+make -j32
+make install
+cd ../
+
 
 ### ------------------- R ###
   * R		3.1.2
