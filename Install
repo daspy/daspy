@@ -73,8 +73,6 @@ Here we introduce the files of DasPy and how to install the related components
   * pp 		1.6.4
   * mpi4py		1.3.1
   * futures		2.2.0
-  * PypeR 		1.1.2
-  * inspyred            1.0
 
 sudo dnf install gcc gcc-c++ gcc-gfortran kernel-devel kernel-headers dkms
 sudo dnf install make cmake-gui htop mosh filezilla sshpass system-config-users nano subversion cvs bzr mercurial git
