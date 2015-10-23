@@ -86,7 +86,7 @@ Def_CESM_Multi_Instance = 0 # for future
 if mpi4py_rank == 0:
     print "*********************************************** Common Configuration"
 Def_Run_DAS_Model    = 1     # Do Data Assimilation
-Def_Run_Model         = 0     # for future
+Def_Run_Model        = 0     # for future
 Def_Run_WRF         = 0     # for future
 Def_Irrigation_Opt  = 0     # for future
 
