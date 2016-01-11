@@ -380,28 +380,179 @@ def CLM_Assim_Common(Block_Index, Model_Driver, Def_PP, Def_First_Run, Def_Print
                 print "not numpy.size(Par_Uniform_STD) >= 1 !!!!!!!!!!!!!!!!!!!!!!"
                 os.abort()
         
+        ########################NS++++++++++++++++++++++
+        if (numpy.abs(numpy.min(Obs_Grid[:, 2]) - numpy.mean(E0_ObsModel[:, 0:Ensemble_Number])) > 3*numpy.std(E0_ObsModel[:, 0:Ensemble_Number])) or \
+            (numpy.abs(numpy.max(Obs_Grid[:, 2]) - numpy.mean(E0_ObsModel[:, 0:Ensemble_Number])) > 3*numpy.std(E0_ObsModel[:, 0:Ensemble_Number])):
+            Normal_Score_Trans_Temp = 0
+        else:
+            Normal_Score_Trans_Temp = Normal_Score_Trans
+            
         ############################ BoxCox
         minimize_lbfgsb_m = 10
         minimize_lbfgsb_iprint = -1
         minimize_lbfgsb_factr = 1e1
         minimize_lbfgsb_pgtol = 1.0e-5
         minimize_lbfgsb_epsilon_in = numpy.asarray([1e-08,1e-08])
-        try:
-            xa,innovation,increments,localization_map,bias_a = Call_ReBEL_Octave.ReBEL(gssm_das_octave, letkf, letkf_common, octave,ftype,gssm_name,Gssm_model_tag,nx,ny,nwindow,Ensemble_Number,Num_Local_Obs,eps,Mask[~Mask_Index,:],Obs_Grid,h,B,R,Model_State,E0_SysModel[:,0:Ensemble_Number],E0_ObsModel,
-                                          Observation_Corelation_Par,Grid_Resolution_CEA,Grid_Resolution_CEA,bf,alpha_bias, Bias_Forecast_Model_Option, Bias_Observation_Model_Option, msw_infl,parm_infl,Post_Inflation_Alpha,omp_get_num_procs_ParFor,U1,U2,Def_Print,Parameter_Optimization_Flag,
-                                          Parameter_Regularization,Par_Uniform_STD,Par_Sens_Dim,State_DIM_Single_Layer,Def_Localization_Temp,Normal_Score_Trans,State_Layer_Num_Single_Column,Bias_Model_Uniform_STD,Bias_Obs_Uniform_STD,Model_Inflation_Uniform_STD,
-                                          minimize_lbfgsb_m,minimize_lbfgsb_iprint,minimize_lbfgsb_epsilon_in,minimize_lbfgsb_factr,minimize_lbfgsb_pgtol)
-        except:
-            print "**************** User Default Correlation Parameters to Call ReBEL Again!"
-            Observation_Corelation_Par[0, 0] = 6 # matern Model
-            Observation_Corelation_Par[1, 0] = 0.0
-            Observation_Corelation_Par[2, 0] = 1.0
-            Observation_Corelation_Par[3, 0] = 4.0*Grid_Resolution_CEA
-            Observation_Corelation_Par[4, 0] = 1.0
-            xa,innovation,increments,localization_map,bias_a = Call_ReBEL_Octave.ReBEL(gssm_das_octave, letkf, letkf_common, octave,ftype,gssm_name,Gssm_model_tag,nx,ny,nwindow,Ensemble_Number,Num_Local_Obs,eps,Mask[~Mask_Index,:],Obs_Grid,h,B,R,Model_State,E0_SysModel[:,0:Ensemble_Number],E0_ObsModel,
-                                          Observation_Corelation_Par,Grid_Resolution_CEA,Grid_Resolution_CEA,bf,alpha_bias, Bias_Forecast_Model_Option, Bias_Observation_Model_Option, msw_infl,parm_infl,Post_Inflation_Alpha,omp_get_num_procs_ParFor,U1,U2,Def_Print,Parameter_Optimization_Flag,
-                                          Parameter_Regularization,Par_Uniform_STD,Par_Sens_Dim,State_DIM_Single_Layer,Def_Localization_Temp,Normal_Score_Trans,State_Layer_Num_Single_Column,Bias_Model_Uniform_STD,Bias_Obs_Uniform_STD,Model_Inflation_Uniform_STD,
-                                          minimize_lbfgsb_m,minimize_lbfgsb_iprint,minimize_lbfgsb_epsilon_in,minimize_lbfgsb_factr,minimize_lbfgsb_pgtol)
+        
+        if PDAF_Assim_Framework:
+            
+            print "********************************************** Using PDAF to Accelerate Assimilation"
+            if PDAF_Filter_Type == 2 or PDAF_Filter_Type == 4 or PDAF_Filter_Type == 6:
+                type_forget = 0
+            else:
+                type_forget = 0
+            
+            # Assing the processors for MPI
+            if ny < NSLOTS:
+                NSLOTS_PDAF = ny
+            else:
+                NSLOTS_PDAF = NSLOTS
+            
+            if PDAF_Assim_Framework == 2:
+                PDAF_Path = "mpiexec -n "+str(NSLOTS_PDAF)+" "+DasPy_Path+"Algorithm/PDAF/bin/offline_2D_parallel/PDAF_offline -filtertype "+str(PDAF_Filter_Type)+" -type_forget "+str(type_forget)+" -locweight 2 -local_range "+str(Observation_Corelation_Par[3, 0])
+                #PDAF_Path = "mpiexec -n 1 "+DasPy_Path+"Algorithm/PDAF/bin/offline_2D_parallel/PDAF_offline -filtertype "+str(PDAF_Filter_Type)+" -type_forget "+str(type_forget)+" -locweight 2 -local_range "+str(Observation_Corelation_Par[3, 0])
+            
+            else:
+                PDAF_Path = DasPy_Path+"Algorithm/PDAF/bin/offline_2D_serial/PDAF_offline -filtertype "+str(PDAF_Filter_Type)+" -type_forget "+str(type_forget)+" -locweight 2 -local_range "+str(Observation_Corelation_Par[3, 0])
+                #PDAF_Path = DasPy_Path+"Algorithm/PDAF/bin/offline_2D_serial/PDAF_offline -filtertype "+str(PDAF_Filter_Type)+" -type_forget "+str(type_forget)+" -locweight 2 -local_range 500"
+            print "-----PDAF_Path-----",PDAF_Path
+            
+            os.chdir(DasPy_Path)
+            
+            PDAF_Work_Path = DAS_Output_Path+"Analysis/"+Region_Name+"/Block_"+str(Block_Index+1)+"/"
+            NC_FileName_PDAF = PDAF_Work_Path+"NC_to_PDAF.nc"
+            
+            NC_File_Out_PDAF = netCDF4.Dataset(NC_FileName_PDAF, 'w', diskless=True, persist=True, format='NETCDF4')
+            # Dim the dimensions of NetCDF
+            NC_File_Out_PDAF.createDimension('STATE_DIM', nx)
+            NC_File_Out_PDAF.createDimension('Parameter_DIM', Par_Sens_Dim)
+            NC_File_Out_PDAF.createDimension('Par_Sens_Dim', Par_Sens_Dim)
+            NC_File_Out_PDAF.createDimension('OBS_DIM', ny)
+            NC_File_Out_PDAF.createDimension('SOIL_LAYER_NUM', Soil_Layer_Num)
+            NC_File_Out_PDAF.createDimension('ParFlow_Layer_Num', ParFlow_Layer_Num)
+            NC_File_Out_PDAF.createDimension('ENSEMBLE_NUMBER', Ensemble_Number)
+            NC_File_Out_PDAF.createDimension('COORD_DIM', 2)
+            NC_File_Out_PDAF.createDimension('Scalar', 1)
+            NC_File_Out_PDAF.createDimension('Bias_Model_Dim',Bias_Model_Dim)
+            NC_File_Out_PDAF.createDimension('Bias_Obs_Dim',Bias_Obs_Dim) 
+            NC_File_Out_PDAF.createDimension('lmbda_DIM',2)
+            
+            NC_File_Out_PDAF.createVariable('Normal_Score_Trans','i4',('Scalar',),zlib=True)
+            if Normal_Score_Trans_Temp:
+                NC_File_Out_PDAF.variables['Normal_Score_Trans'][:] = 1
+            else:
+                NC_File_Out_PDAF.variables['Normal_Score_Trans'][:] = 0
+            NC_File_Out_PDAF.createVariable('Alpha_Inflation','f4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['Alpha_Inflation'][:] = Post_Inflation_Alpha
+            NC_File_Out_PDAF.createVariable('Parameter_Optimization_Flag','i4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['Parameter_Optimization_Flag'][:] = Parameter_Optimization_Flag
+            NC_File_Out_PDAF.createVariable('Bias_Forecast_Model_Option','i4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['Bias_Forecast_Model_Option'][:] = Bias_Forecast_Model_Option
+            NC_File_Out_PDAF.createVariable('Bias_Observation_Model_Option','i4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['Bias_Observation_Model_Option'][:] = Bias_Observation_Model_Option
+            NC_File_Out_PDAF.createVariable('State_DIM_Single_Layer','i4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['State_DIM_Single_Layer'][:] = State_DIM_Single_Layer
+            NC_File_Out_PDAF.createVariable('State_DIM_Single_Column','i4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['State_DIM_Single_Column'][:] = State_Layer_Num_Single_Column
+            NC_File_Out_PDAF.createVariable('Correlation_Range','i4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['Correlation_Range'][:] = Observation_Corelation_Par[3, 0] / Grid_Resolution_CEA
+            NC_File_Out_PDAF.createVariable('GridSize_Sys','f4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['GridSize_Sys'][:] = GridSize_Sys
+            NC_File_Out_PDAF.createVariable('GridSize_Obs','f4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['GridSize_Obs'][:] = GridSize_Obs
+            
+            NC_File_Out_PDAF.createVariable('minimize_lbfgsb_n','i4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['minimize_lbfgsb_n'][:] = 2
+            NC_File_Out_PDAF.createVariable('minimize_lbfgsb_m','i4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['minimize_lbfgsb_m'][:] = minimize_lbfgsb_m
+            NC_File_Out_PDAF.createVariable('minimize_lbfgsb_iprint','i4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['minimize_lbfgsb_iprint'][:] = minimize_lbfgsb_iprint
+            NC_File_Out_PDAF.createVariable('minimize_lbfgsb_factr','f4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['minimize_lbfgsb_factr'][:] = minimize_lbfgsb_factr
+            NC_File_Out_PDAF.createVariable('minimize_lbfgsb_pgtol','f4',('Scalar',),zlib=True)
+            NC_File_Out_PDAF.variables['minimize_lbfgsb_pgtol'][:] = minimize_lbfgsb_pgtol
+            NC_File_Out_PDAF.createVariable('minimize_lbfgsb_epsilon_in','f4',('lmbda_DIM',),zlib=True)
+            NC_File_Out_PDAF.variables['minimize_lbfgsb_epsilon_in'][:] = minimize_lbfgsb_epsilon_in
+                                    
+            NC_File_Out_PDAF.createVariable('XF_NC','f4',('ENSEMBLE_NUMBER','STATE_DIM',),zlib=True)
+            NC_File_Out_PDAF.createVariable('HXF_NC','f4',('ENSEMBLE_NUMBER','STATE_DIM',),zlib=True)
+            NC_File_Out_PDAF.createVariable('H_NC','i4',('STATE_DIM','OBS_DIM',),zlib=True)
+            NC_File_Out_PDAF.createVariable('OBS_NC','f4',('STATE_DIM',),zlib=True)
+            NC_File_Out_PDAF.createVariable('XF_COORD_NC','f4',('COORD_DIM','STATE_DIM',),zlib=True)
+            NC_File_Out_PDAF.createVariable('OBS_COORD_NC','f4',('COORD_DIM','OBS_DIM',),zlib=True)
+            NC_File_Out_PDAF.createVariable('R_NC','f4',('OBS_DIM','OBS_DIM',),zlib=True)
+            NC_File_Out_PDAF.createVariable('XA_NC','f4',('ENSEMBLE_NUMBER','STATE_DIM',),zlib=True)
+            NC_File_Out_PDAF.createVariable('XM_NC','f4',('STATE_DIM',),zlib=True)
+            NC_File_Out_PDAF.createVariable('Par_Uniform_STD','f4',('Parameter_DIM',),zlib=True)
+            NC_File_Out_PDAF.createVariable('Bias_Model_Uniform_STD','f4',('Bias_Model_Dim',),zlib=True)
+            NC_File_Out_PDAF.createVariable('Bias_Obs_Uniform_STD','f4',('Bias_Obs_Dim',),zlib=True)
+            NC_File_Out_PDAF.createVariable('Model_Inflation_Uniform_STD','f4',('STATE_DIM',),zlib=True)
+            
+            NC_File_Out_PDAF.close()
+            
+            NC_File_Out_PDAF = netCDF4.Dataset(NC_FileName_PDAF, 'r+', format='NETCDF4')
+            NC_File_Out_PDAF.variables['XF_NC'][:,:] = numpy.transpose(E0_SysModel[:, 0:Ensemble_Number])
+            #NC_File_Out_PDAF.variables['XF_NC_Init'][:,:] = numpy.transpose(E0_SysModel_Copy_Dual[:, 0:Ensemble_Number])
+            NC_File_Out_PDAF.variables['HXF_NC'][:,:] = numpy.transpose(E0_ObsModel[:, 0:Ensemble_Number])
+            NC_File_Out_PDAF.variables['H_NC'][:,:] = 0.0
+            NC_File_Out_PDAF.variables['H_NC'][:,:] = numpy.transpose(h[:,:])
+            NC_File_Out_PDAF.variables['OBS_NC'][:] = -9999.0
+            NC_File_Out_PDAF.variables['OBS_NC'][Obs_Index] = Obs_Grid[:, 2]
+            NC_File_Out_PDAF.variables['XF_COORD_NC'][0,:] = Mask[~Mask_Index, 0]
+            NC_File_Out_PDAF.variables['XF_COORD_NC'][1,:] = Mask[~Mask_Index, 1]                         
+            NC_File_Out_PDAF.variables['OBS_COORD_NC'][0,:] = Mask[~Mask_Index, 0][Obs_Index]
+            NC_File_Out_PDAF.variables['OBS_COORD_NC'][1,:] = Mask[~Mask_Index, 1][Obs_Index]
+            #NC_File_Out_PDAF.variables['OBS_COORD_NC'][0,:] = Observation_Longitude.flatten()[~Mask_Index_Single_Layer]
+            #NC_File_Out_PDAF.variables['OBS_COORD_NC'][1,:] = Observation_Latitude.flatten()[~Mask_Index_Single_Layer]
+            
+            NC_File_Out_PDAF.variables['R_NC'][:,:] = numpy.transpose(R)
+            NC_File_Out_PDAF.variables['Par_Uniform_STD'][:] = Par_Uniform_STD
+            NC_File_Out_PDAF.variables['Bias_Model_Uniform_STD'][:] = Bias_Model_Uniform_STD[:]
+            NC_File_Out_PDAF.variables['Bias_Obs_Uniform_STD'][:] = Bias_Obs_Uniform_STD[:]
+            NC_File_Out_PDAF.variables['Model_Inflation_Uniform_STD'][:] = Model_Inflation_Uniform_STD[:]
+            
+            NC_File_Out_PDAF.sync()
+            NC_File_Out_PDAF.close()
+            
+            os.chdir(PDAF_Work_Path)
+            print "************Call PDAF"
+            PDAF_Output = open("PDAF_Output.txt","w")
+            subprocess.call(shlex.split(PDAF_Path), stdout=PDAF_Output, stderr=PDAF_Output, shell=False)
+            #subprocess.call(shlex.split(PDAF_Path, shell=False)
+            PDAF_Output.close()
+            #subprocess.call(shlex.split("killall -9 -q -w PDAF_offline &> /dev/null"),shell=False)
+            #subprocess.call(shlex.split("killall -9 -q -w psilogger PDAF_offline &> /dev/null"),shell=False)
+            #os.abort()
+            os.chdir(DasPy_Path)
+            
+            NC_File_Out_PDAF = netCDF4.Dataset(NC_FileName_PDAF, 'r')
+            xa = numpy.transpose(NC_File_Out_PDAF.variables['XA_NC'][:,:])
+            NC_File_Out_PDAF.close()
+            
+            innovation = numpy.zeros((nx,Ensemble_Number),dtype=numpy.float32)
+            increments = numpy.zeros((nx,Ensemble_Number),dtype=numpy.float32)
+            localization_map = numpy.zeros(nx,dtype=numpy.float32)
+            bias_a = numpy.zeros(nx,dtype=numpy.float32)
+            
+            #os.abort()
+                                
+        else:
+            try:
+                xa,innovation,increments,localization_map,bias_a = Call_ReBEL_Octave.ReBEL(gssm_das_octave, letkf, letkf_common, octave,ftype,gssm_name,Gssm_model_tag,nx,ny,nwindow,Ensemble_Number,Num_Local_Obs,eps,Mask[~Mask_Index,:],Obs_Grid,h,B,R,Model_State,E0_SysModel[:,0:Ensemble_Number],E0_ObsModel,
+                                              Observation_Corelation_Par,Grid_Resolution_CEA,Grid_Resolution_CEA,bf,alpha_bias, Bias_Forecast_Model_Option, Bias_Observation_Model_Option, msw_infl,parm_infl,Post_Inflation_Alpha,omp_get_num_procs_ParFor,U1,U2,Def_Print,Parameter_Optimization_Flag,
+                                              Parameter_Regularization,Par_Uniform_STD,Par_Sens_Dim,State_DIM_Single_Layer,Def_Localization_Temp,Normal_Score_Trans,State_Layer_Num_Single_Column,Bias_Model_Uniform_STD,Bias_Obs_Uniform_STD,Model_Inflation_Uniform_STD,
+                                              minimize_lbfgsb_m,minimize_lbfgsb_iprint,minimize_lbfgsb_epsilon_in,minimize_lbfgsb_factr,minimize_lbfgsb_pgtol)
+            except:
+                print "**************** User Default Correlation Parameters to Call ReBEL Again!"
+                Observation_Corelation_Par[0, 0] = 6 # matern Model
+                Observation_Corelation_Par[1, 0] = 0.0
+                Observation_Corelation_Par[2, 0] = 1.0
+                Observation_Corelation_Par[3, 0] = 4.0*Grid_Resolution_CEA
+                Observation_Corelation_Par[4, 0] = 1.0
+                xa,innovation,increments,localization_map,bias_a = Call_ReBEL_Octave.ReBEL(gssm_das_octave, letkf, letkf_common, octave,ftype,gssm_name,Gssm_model_tag,nx,ny,nwindow,Ensemble_Number,Num_Local_Obs,eps,Mask[~Mask_Index,:],Obs_Grid,h,B,R,Model_State,E0_SysModel[:,0:Ensemble_Number],E0_ObsModel,
+                                              Observation_Corelation_Par,Grid_Resolution_CEA,Grid_Resolution_CEA,bf,alpha_bias, Bias_Forecast_Model_Option, Bias_Observation_Model_Option, msw_infl,parm_infl,Post_Inflation_Alpha,omp_get_num_procs_ParFor,U1,U2,Def_Print,Parameter_Optimization_Flag,
+                                              Parameter_Regularization,Par_Uniform_STD,Par_Sens_Dim,State_DIM_Single_Layer,Def_Localization_Temp,Normal_Score_Trans,State_Layer_Num_Single_Column,Bias_Model_Uniform_STD,Bias_Obs_Uniform_STD,Model_Inflation_Uniform_STD,
+                                              minimize_lbfgsb_m,minimize_lbfgsb_iprint,minimize_lbfgsb_epsilon_in,minimize_lbfgsb_factr,minimize_lbfgsb_pgtol)
         
         if Def_Print:
             print "********************************** Mean Innovation ************************************************"

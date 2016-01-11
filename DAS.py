@@ -105,8 +105,8 @@ Ensemble_Number         = 2    # Run CLM in Ensemble
 Ensemble_Number_Predict = 100  # for future
 
 Normal_Score_Trans      = 0 # for future
-PDAF_Assim_Framework    = 0 # for future
-PDAF_Filter_Type        = 5 # for future
+PDAF_Assim_Framework    = 1 # Whether to use the Parallel Data Assimilation Framework (PDAF)
+PDAF_Filter_Type        = 5 # 2:EnKF 4:ETKF 5:LETKF 6:ESTKF 7:LESTKF
 
 if mpi4py_rank == 0:
     print "**********************************************************CLM******************************************************************"

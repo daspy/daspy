@@ -1,0 +1,49 @@
+This directory is part od PDAF - the Parallel Data Assimilation Framework.
+It contains an example implementation of the offline mode of PDAF with a 
+simple 2-dimensional model setup.
+
+The implementation is described in detail in the tutorial that is available
+on the web site of PDAF (http://pdaf.awi.de).
+
+The directories are as follows:
+
+inputs_offline/
+This directory contains input files to execute the example programs for PDAF in offline mode.
+
+inputs_online/
+This directory contains inputs files to execute the example programs for PDAF in online mode.
+
+offline_2D_serial/
+contains an implementation of the offline mode without parallelization support.
+
+offline_2D_parallel/
+contains an implementation of the offline mode with parallelization. Thus,
+the example can be run with multiple processors. Required is an MPI library
+like OpenMPI.
+
+offline_2D_openmp/
+contains an implementation of the offline mode with only OpenMP support. Comparing to 
+offline_2D_serial shows the necessary change to implement the OpenMP parallelization.
+The example can be run with multiple processors by setting the environment variable
+OMP_NUM_THREADS.
+
+online_2D_serialmodel/
+contains an implementation of the online mode with a model that is not parallelized. The
+example should be run using multiple processes so that the number of processes is equal to
+the ensmeble size. 
+
+online_2D_parallelmodel/
+contains an implementation of the online model of PDAF with a model that is parallelized
+using domain-decomposition with MPI. The example should be run using multiple processes. The 
+number of processes should be at least equal to the ensemble size, but can also be a 
+multiple of the ensemble size, e.g. twice the ensmeble size to let each model run with
+two processes.
+
+online_2D_serialmodel_openmp/
+contains an extension of the implementation in online_2D_serialmodel/ so that it supports
+the OpenMP parallelization of the local analysis filters in PDAF. When the model is started
+using mpirun (or mpiexec), the number of MPI processes should be equal to the ensemble size. 
+As usual with OpenMP, one has to set OMP_NUM_THREADS to the number of OpenMP threads used by 
+each MPI process. I.e. OMP_NUM_THREADS=2 will execute the analysis step using two OpenMP
+threads while the ensmble is integrated using the MPI-parallelization by distributing the
+ensmeble over MPI-processes.
