@@ -43,6 +43,18 @@ Here we introduce the files of DasPy and how to install the related components
   1. Download the source code from: https://software.ecmwf.int/wiki/display/LDAS/CMEM
   2. copy the cmem excutable as DasPy_Path+"ObsModel/CMEM/bin/cmem
 
+# Install PDAF
+  cd $HOME_Path/DasPy_Release/Algorithm/PDAF/src/PDAF-D_V1.11/src
+  export PDAF_ARCH=linux_gfortran
+  make clean
+  make -j2
+  mkdir -p ../lib/serial
+  cp ../lib/libpdaf-d.a ../lib/serial/
+
+  cd $HOME_Path/DasPy_Release/Algorithm/PDAF/bin/offline_2D_serial
+  make clean
+  make -j2
+
 # Build DasPy_Components #
   export HOME_Path="/lustre/jhome7/jicg41/jicg4128"
   =============start_ppserver
