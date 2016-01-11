@@ -44,6 +44,8 @@ Here we introduce the files of DasPy and how to install the related components
   2. copy the cmem excutable as DasPy_Path+"ObsModel/CMEM/bin/cmem
 
 # Install PDAF
+  Download PDAF from: http://pdaf.awi.de/trac/
+  
   cd $HOME_Path/DasPy_Release/Algorithm/PDAF/src/PDAF-D_V1.11/src
   export PDAF_ARCH=linux_gfortran
   make clean
