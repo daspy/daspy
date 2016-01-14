@@ -29,6 +29,9 @@
   * Def_First_Run       = 1  # 0 for restart run, 1 for first run, -1 for recover run if 0 fails. Define whether it is the first run
     1. It controls the copy and perturbation of surface data
   * Ensemble_Number         = 50    # Run CLM in Ensemble
+  * PDAF_Assim_Framework    = 1 # Whether to use the Parallel Data Assimilation Framework (PDAF)
+  * PDAF_Filter_Type        = 5 # 2:EnKF 4:ETKF 5:LETKF 6:ESTKF 7:LESTKF
+
   * ######################################## for cosmic-ray only
   * N0 = 1132
   * nlyr = 300
