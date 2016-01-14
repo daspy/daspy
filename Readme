@@ -7,6 +7,7 @@ The objective of DasPy development is for the multisources and multivariate land
 
 ### Assimilation Algorithm: ###
   * Local Ensemble Transform Kalman Filter (https://code.google.com/p/miyoshi/)
+  * Parallel Data Assimilation Framework (EnKF, ETKF, LETKF, ESTKF, LESTKF)
 
 ### Observation Operator: ###
   1. CMEM - Interface to Community Microwave Emission Modelling Platform 4.1 (https://software.ecmwf.int/wiki/display/LDAS/CMEM)
