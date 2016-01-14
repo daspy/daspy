@@ -10,11 +10,10 @@
 9. ......
 
 ----------DA Strategy:
-1. PDAF (Parallel Data Assimilation Framework) Integration
-2. Adaptive Error Estimation
-3. Ensemble Smoothing
-4. Bias Estimation
-5. More Parameter Estimation Choices
+1. Adaptive Error Estimation
+2. Ensemble Smoothing
+3. Bias Estimation
+4. More Parameter Estimation Choices
 
 ----------Models:
 1. CRTM
