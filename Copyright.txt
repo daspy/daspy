@@ -23,8 +23,11 @@ Please include the following references related to COSMIC:
 
 Copyright of LETKF:
 Author - Takemasa Miyoshi (RIKEN Advanced Institute for Computational Science)
-Please include the following references related to COSMIC:
+Please include the following references related to LETKF:
 1. Miyoshi, T. and Yamane, S.: Local Ensemble Transform Kalman Filtering with an AGCM at a T159/L48 Resolution, Mon Weather Rev, 135, 3841-3861, 2007.
 2. Miyoshi, T., Kondo, K., and Imamura, T.: The 10,240-member ensemble Kalman filtering with an intermediate AGCM, Geophys Res Lett, 41, 5264-5271, 2014.
 
-
+Copyright of PDAF:
+Author - Lars Nerger (Computing Center of the Alfred Wegener Institute)
+Please include the following references related to PDAF:
+1. Nerger, L., Hiller, W. (2013). Software for Ensemble-based Data Assimilation Systems - Implementation Strategies and Scalability. Computers and Geosciences, 55, 110-118.
