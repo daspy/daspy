@@ -7,7 +7,7 @@ The objective of DasPy development is for the multisources and multivariate land
 
 ### Assimilation Algorithm: ###
   * Local Ensemble Transform Kalman Filter (https://code.google.com/p/miyoshi/)
-  * Parallel Data Assimilation Framework (EnKF, ETKF, LETKF, ESTKF, LESTKF)
+  * Parallel Data Assimilation Framework (EnKF, ETKF, LETKF, ESTKF, LESTKF) -- Only for test
  
 ### Perturbation Method: ###
   * Initial Condition
